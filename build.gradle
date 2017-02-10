@@ -1,0 +1,24 @@
+apply plugin: "java"
+apply plugin: "eclipse"
+
+sourceCompatibility = 1.7
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
+// define 'gdxVersion' if not defined yet. This allows
+// a project depending on this library to define 'gdxVersion' itself,
+// and yet be able to build this library standalone too.
+def gdxVersion = System.getenv("gdxVersion") ?: "1.9.3"
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    // Extent of this dependency is small (IColoredString, IMarkup). It's planned to be removed
+    // at some point.
+    compile project(":SquidLib")
+}
