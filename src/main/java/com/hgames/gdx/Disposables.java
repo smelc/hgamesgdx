@@ -15,7 +15,7 @@ public class Disposables {
 	 * 
 	 * @param renderer
 	 */
-	public static void safeDisposeRenderer(ShapeRenderer renderer) {
+	public static void safeDisposeRenderer(/* @Nullable */ ShapeRenderer renderer) {
 		if (renderer == null || renderer.isDrawing())
 			return;
 
@@ -28,7 +28,7 @@ public class Disposables {
 	 * 
 	 * @param d
 	 */
-	public static void safeDispose(Disposable d) {
+	public static void safeDispose(/* @Nullable */ Disposable d) {
 		if (d == null)
 			return;
 
