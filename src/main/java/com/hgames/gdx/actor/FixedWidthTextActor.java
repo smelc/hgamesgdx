@@ -3,15 +3,13 @@ package com.hgames.gdx.actor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.utils.Align;
-import com.hgames.gdx.Constants;
 
 import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
@@ -26,7 +24,7 @@ import squidpony.panel.IMarkup;
  * @param <T>
  *            The type of color.
  */
-public class FixedWidthTextActor<T extends Color> extends Actor {
+public class FixedWidthTextActor<T extends Color> extends Widget {
 
 	protected BitmapFont font;
 	protected List<IColoredString<T>> text;
@@ -39,7 +37,8 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 
 	protected int align = Align.left;
 
-	protected boolean invalidHeight = true;
+	private float prefWidth = -1;
+	private float prefHeight = -1;
 
 	/**
 	 * @param font
@@ -58,7 +57,6 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 		this.font = font;
 		this.text = text;
 		this.markup = markup;
-		trySetHeight();
 	}
 
 	/**
@@ -69,7 +67,6 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 		if (markup != null && font != null)
 			font.getData().markupEnabled |= true;
 		this.font = font;
-		trySetHeight();
 	}
 
 	/**
@@ -80,7 +77,6 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 	public void setText(List<IColoredString<T>> text) {
 		this.text = text;
 		invalidateTypesetText();
-		trySetHeight();
 	}
 
 	/**
@@ -94,11 +90,12 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 			this.text = new ArrayList<IColoredString<T>>();
 		this.text.add(text);
 		invalidateTypesetText();
-		trySetHeight();
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
+
 		if (text == null)
 			/* Nothing to do */
 			return;
@@ -106,11 +103,6 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 		if (font == null)
 			throw new NullPointerException(
 					"The font should be set when drawing a " + getClass().getSimpleName());
-
-		final boolean ok = trySetHeight();
-		if (!ok)
-			Gdx.app.log(Constants.TAG, "'s height is not set when drawing a " + getClass().getSimpleName()
-					+ ", this isn't good.");
 
 		final float x = getX();
 		final float width = getWidth();
@@ -129,8 +121,61 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 
 	@Override
 	public void setWidth(float w) {
+		prefWidth = w;
 		super.setWidth(w);
-		trySetHeight();
+	}
+
+	@Override
+	public float getPrefWidth() {
+		return prefWidth;
+	}
+
+	@Override
+	public float getPrefHeight() {
+		if (prefHeight == -1) {
+			/* Not computed */
+			if (text == null || font == null)
+				/* Cannot do */
+				return 0;
+			final float width = getWidth();
+			if (width <= 0)
+				/* Cannot do */
+				return 0;
+
+			float h = 0;
+			final String[] typesetText = getTypesetText();
+			final int bound = typesetText.length;
+			final BitmapFontCache cache = font.getCache();
+			cache.clear();
+			for (int i = 0; i < bound; i++) {
+				final String toDisplay = typesetText[i];
+				final GlyphLayout glyph = cache.addText(toDisplay, 0, 0, 0, toDisplay.length(), width, align,
+						wrap);
+				h += glyph.height;
+				cache.clear();
+			}
+
+			prefHeight = h;
+		}
+
+		return prefHeight;
+	}
+
+	@Override
+	public boolean needsLayout() {
+		return prefHeight < 0;
+	}
+
+	@Override
+	public void invalidate() {
+		prefHeight = -1;
+	}
+
+	@Override
+	public void layout() {
+		final float h = getPrefHeight();
+		if (0 < h)
+			setHeight(h);
 	}
 
 	protected String[] getTypesetText() {
@@ -145,41 +190,7 @@ public class FixedWidthTextActor<T extends Color> extends Actor {
 		return typesetText;
 	}
 
-	protected void invalidateHeight() {
-		invalidHeight = true;
-	}
-
 	protected void invalidateTypesetText() {
 		typesetText = null;
-	}
-
-	/** Whether the height could be set */
-	private boolean trySetHeight() {
-		if (!invalidHeight)
-			return true;
-
-		if (text == null || font == null)
-			return false;
-		final float width = getWidth();
-		if (width == 0)
-			/* Cannot do */
-			return false;
-
-		float result = 0;
-		final String[] typesetText = getTypesetText();
-		final int bound = typesetText.length;
-		final BitmapFontCache cache = font.getCache();
-		cache.clear();
-		for (int i = 0; i < bound; i++) {
-			final String toDisplay = typesetText[i];
-			final GlyphLayout glyph = cache.addText(toDisplay, 0, 0, 0, toDisplay.length(), width, align,
-					wrap);
-			result += glyph.height;
-			cache.clear();
-		}
-
-		invalidHeight = false;
-		setHeight(result);
-		return true;
 	}
 }
