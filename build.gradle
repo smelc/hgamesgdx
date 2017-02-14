@@ -18,7 +18,5 @@ def gdxVersion = System.getenv("gdxVersion") ?: "1.9.3"
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    // Extent of this dependency is small (IColoredString, IMarkup). It's planned to be removed
-    // at some point.
     compile project(":SquidLib")
 }
