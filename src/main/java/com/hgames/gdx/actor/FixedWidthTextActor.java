@@ -44,6 +44,34 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 	 * @param font
 	 *            The font to use, or null to set it later.
 	 * @param text
+	 *            The text to display, or null to set it later.
+	 * @param markup
+	 *            The markup to use, or null.
+	 */
+	public FixedWidthTextActor(/* @Nullable */ BitmapFont font, /* @Nullable */ String text,
+			IMarkup<T> markup) {
+		this(font, text, null, markup);
+	}
+
+	/**
+	 * @param font
+	 *            The font to use, or null to set it later.
+	 * @param text
+	 *            The text to display, or null to set it later.
+	 * @param color
+	 *            The color of {@code text}, or null to use a default.
+	 * @param markup
+	 *            The markup to use, or null.
+	 */
+	public FixedWidthTextActor(/* @Nullable */ BitmapFont font, /* @Nullable */ String text, T color,
+			IMarkup<T> markup) {
+		this(font, toLICS(text, color), markup);
+	}
+
+	/**
+	 * @param font
+	 *            The font to use, or null to set it later.
+	 * @param text
 	 *            The text to display, or null to set it later. Each member at
 	 *            index > 0 of this list is displayed after a new line after its
 	 *            predecessor.
@@ -131,6 +159,18 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 	}
 
 	@Override
+	public float getHeight() {
+		float h = super.getHeight();
+		if (h == 0) {
+			/* Need to compute it */
+			h = getPrefHeight();
+			super.setHeight(h);
+		}
+
+		return h;
+	}
+
+	@Override
 	public float getPrefHeight() {
 		if (prefHeight == -1) {
 			/* Not computed */
@@ -192,5 +232,11 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 
 	protected void invalidateTypesetText() {
 		typesetText = null;
+	}
+
+	private static <T> List<IColoredString<T>> toLICS(String text, T color) {
+		final List<IColoredString<T>> list = new ArrayList<IColoredString<T>>(1);
+		list.add(IColoredString.Impl.create(text, color));
+		return list;
 	}
 }
