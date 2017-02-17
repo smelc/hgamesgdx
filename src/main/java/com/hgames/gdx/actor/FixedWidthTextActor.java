@@ -134,6 +134,7 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 
 		final float x = getX();
 		final float width = getWidth();
+		final float y = getY();
 
 		float height = getHeight();
 		final float destx = x;
@@ -141,8 +142,8 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 		final int bound = typesetText.length;
 		for (int i = 0; i < bound; i++) {
 			final String toDisplay = typesetText[i];
-			final GlyphLayout glyph = font.draw(batch, toDisplay, destx, height, 0, toDisplay.length(), width,
-					align, wrap);
+			final GlyphLayout glyph = font.draw(batch, toDisplay, destx, y + height, 0, toDisplay.length(),
+					width, align, wrap);
 			height -= glyph.height;
 		}
 	}
