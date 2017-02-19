@@ -72,6 +72,19 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 	 * @param font
 	 *            The font to use, or null to set it later.
 	 * @param text
+	 *            The text to display, or null to set it later.
+	 * @param markup
+	 *            The markup to use, or null.
+	 */
+	public FixedWidthTextActor(/* @Nullable */ BitmapFont font, /* @Nullable */ IColoredString<T> text,
+			IMarkup<T> markup) {
+		this(font, toList(text), markup);
+	}
+
+	/**
+	 * @param font
+	 *            The font to use, or null to set it later.
+	 * @param text
 	 *            The text to display, or null to set it later. Each member at
 	 *            index > 0 of this list is displayed after a new line after its
 	 *            predecessor.
@@ -238,6 +251,12 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 	private static <T> List<IColoredString<T>> toLICS(String text, T color) {
 		final List<IColoredString<T>> list = new ArrayList<IColoredString<T>>(1);
 		list.add(IColoredString.Impl.create(text, color));
+		return list;
+	}
+
+	private static <T> List<T> toList(T t) {
+		final List<T> list = new ArrayList<T>(1);
+		list.add(t);
 		return list;
 	}
 }
