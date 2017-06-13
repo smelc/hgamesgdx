@@ -121,15 +121,15 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 	}
 
 	/**
-	 * @param text
+	 * @param textToAdd
 	 *            The text to add
 	 */
-	public void addText(IColoredString<T> text) {
-		if (text == null)
+	public void addText(IColoredString<T> textToAdd) {
+		if (textToAdd == null)
 			throw new NullPointerException();
 		if (this.text == null)
 			this.text = new ArrayList<IColoredString<T>>();
-		this.text.add(text);
+		this.text.add(textToAdd);
 		invalidateTypesetText();
 	}
 
@@ -151,10 +151,10 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 
 		float height = getHeight();
 		final float destx = x;
-		final String[] typesetText = getTypesetText();
-		final int bound = typesetText.length;
+		final String[] fancytText = getTypesetText();
+		final int bound = fancytText.length;
 		for (int i = 0; i < bound; i++) {
-			final String toDisplay = typesetText[i];
+			final String toDisplay = fancytText[i];
 			final GlyphLayout glyph = font.draw(batch, toDisplay, destx, y + height, 0, toDisplay.length(),
 					width, align, wrap);
 			height -= glyph.height;
@@ -197,12 +197,12 @@ public class FixedWidthTextActor<T extends Color> extends Widget {
 				return 0;
 
 			float h = 0;
-			final String[] typesetText = getTypesetText();
-			final int bound = typesetText.length;
+			final String[] fancyText = getTypesetText();
+			final int bound = fancyText.length;
 			final BitmapFontCache cache = font.getCache();
 			cache.clear();
 			for (int i = 0; i < bound; i++) {
-				final String toDisplay = typesetText[i];
+				final String toDisplay = fancyText[i];
 				final GlyphLayout glyph = cache.addText(toDisplay, 0, 0, 0, toDisplay.length(), width, align,
 						wrap);
 				h += glyph.height;
