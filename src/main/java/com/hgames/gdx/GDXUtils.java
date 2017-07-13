@@ -11,12 +11,47 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 public class GDXUtils {
 
 	/**
+	 * @param red
+	 * @param green
+	 * @param blue
+	 * @param opacity
+	 * @return A fresh color instance.
+	 */
+	public static Color newColor(int red, int green, int blue, int opacity) {
+		final float r = red / 255f;
+		final float g = green / 255f;
+		final float b = blue / 255f;
+		final float a = opacity / 255f;
+		return new Color(r, g, b, a);
+	}
+
+	/**
+	 * @param red
+	 * @param green
+	 * @param blue
+	 * @return A fresh opaque color.
+	 */
+	public static Color newOpaqueColor(int red, int green, int blue) {
+		return newColor(red, green, blue, 255);
+	}
+
+	/**
+	 * @param v
+	 * @return A uniform opaque color
+	 */
+	public static Color newGreyColor(int v) {
+		return newColor(v, v, v, 255);
+	}
+
+	/**
+	 * @param color
+	 *            The color to use, or null for white.
 	 * @return A 1x1 white texture, ready to be stretched and colored for being
 	 *         drawn. Don't forget to {@link Texture#dispose()} it.
 	 */
-	public static Texture createTexture() {
+	public static Texture createTexture(/* @Nullable */ Color color) {
 		final Pixmap tmp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-		tmp.setColor(Color.WHITE);
+		tmp.setColor(color == null ? Color.WHITE : color);
 		tmp.fill();
 		final Texture texture = new Texture(1, 1, Pixmap.Format.RGBA8888);
 		texture.draw(tmp, 0, 0);
