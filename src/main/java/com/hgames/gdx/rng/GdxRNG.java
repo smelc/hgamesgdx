@@ -1,6 +1,10 @@
 package com.hgames.gdx.rng;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.math.RandomXS128;
+import com.hgames.lib.collection.list.Lists;
 import com.hgames.rhogue.rng.AbstractRNG;
 
 import squidpony.squidmath.IRNG;
@@ -11,6 +15,7 @@ import squidpony.squidmath.IRNG;
  * 
  * @author smelC
  */
+@SuppressWarnings("serial") // this class is NOT serializable
 public class GdxRNG extends AbstractRNG {
 
 	private final RandomXS128 delegate;
@@ -23,12 +28,24 @@ public class GdxRNG extends AbstractRNG {
 	}
 
 	/**
-	 * A fresh RNG.
+	 * A fresh RNG using the given seed.
 	 * 
 	 * @param seed
 	 */
 	public GdxRNG(long seed) {
 		this(new RandomXS128(seed));
+	}
+
+	/**
+	 * A fresh RNG using the given seeds.
+	 * 
+	 * @param seed1
+	 *            The first part of the seed
+	 * @param seed2
+	 *            The second part of the seed
+	 */
+	public GdxRNG(long seed1, long seed2) {
+		this(new RandomXS128(seed1, seed2));
 	}
 
 	/**
@@ -64,6 +81,15 @@ public class GdxRNG extends AbstractRNG {
 	@Override
 	public long nextLong() {
 		return delegate.nextLong();
+	}
+
+	@Override
+	public Serializable toSerializable() {
+		/* Matching code should be tagged (GdxRNG-SERIAL) */
+		final ArrayList<Long> result = Lists.newArrayList();
+		result.add(delegate.getState(0));
+		result.add(delegate.getState(1));
+		return result;
 	}
 
 }

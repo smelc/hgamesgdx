@@ -14,5 +14,6 @@ def gdxVersion = System.getenv("gdxVersion") ?: "1.9.6"
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile project(":com.hgames.rhogue")
     compile project(":SquidLib")
 }
