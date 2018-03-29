@@ -87,8 +87,8 @@ public class GdxRNG extends AbstractRNG {
 	public Serializable toSerializable() {
 		/* Matching code should be tagged (GdxRNG-SERIAL) */
 		final ArrayList<Long> result = Lists.newArrayList();
-		result.add(delegate.getState(0));
-		result.add(delegate.getState(1));
+		result.add(Long.valueOf(delegate.getState(0)));
+		result.add(Long.valueOf(delegate.getState(1)));
 		return result;
 	}
 
