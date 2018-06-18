@@ -15,6 +15,8 @@ public class GDXUtils {
 	 * @param green
 	 * @param blue
 	 * @param opacity
+	 *            The opacity, recall that 0 means transparency; while 255 means
+	 *            opacity.
 	 * @return A fresh color instance.
 	 */
 	public static Color newColor(int red, int green, int blue, int opacity) {
@@ -60,8 +62,8 @@ public class GDXUtils {
 	}
 
 	/**
-	 * Draw {@code texture} within the rectangle at (x,y) with the given width
-	 * and height.
+	 * Draw {@code texture} within the rectangle at (x,y) with the given width and
+	 * height.
 	 * 
 	 * @param batch
 	 * @param texture
@@ -71,8 +73,8 @@ public class GDXUtils {
 	 * @param width
 	 * @param height
 	 */
-	public static void drawRectangle(Batch batch, Texture texture, /* @Nullable */ Color color, float x,
-			float y, float width, float height) {
+	public static void drawRectangle(Batch batch, Texture texture, /* @Nullable */ Color color, float x, float y,
+			float width, float height) {
 		final Color save = batch.getColor();
 		if (color != null)
 			batch.setColor(color);
@@ -89,8 +91,8 @@ public class GDXUtils {
 	 * @param width
 	 * @param height
 	 */
-	public static void drawRectangleFrame(Batch batch, Texture texture, /* @Nullable */ Color color, float x,
-			float y, float width, float height) {
+	public static void drawRectangleFrame(Batch batch, Texture texture, /* @Nullable */ Color color, float x, float y,
+			float width, float height) {
 		/* Bottom line */
 		drawRectangle(batch, texture, color, x, y, width, 1f);
 		/* Top line */
