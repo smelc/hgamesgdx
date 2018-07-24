@@ -4,11 +4,24 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+
+import squidpony.squidmath.Coord;
 
 /**
  * @author smelC
  */
 public class GDXUtils {
+
+	/**
+	 * @param npd
+	 * @return A copy of {@code npd}.
+	 */
+	public static NinePatchDrawable clone(NinePatchDrawable npd) {
+		return new NinePatchDrawable(new NinePatch(npd.getPatch()));
+	}
 
 	/**
 	 * @param red
@@ -62,6 +75,30 @@ public class GDXUtils {
 	}
 
 	/**
+	 * Draw a frame around {@code actor}
+	 * 
+	 * @param batch
+	 * @param texture
+	 * @param color
+	 * @param actor
+	 */
+	public static void drawActorFrame(Batch batch, Texture texture, /* @Nullable */ Color color, Actor actor) {
+		drawRectangleFrame(batch, texture, color, actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
+	}
+
+	/**
+	 * Draw a rectangle on {@code actor}
+	 * 
+	 * @param batch
+	 * @param texture
+	 * @param color
+	 * @param actor
+	 */
+	public static void drawActorRectangle(Batch batch, Texture texture, /* @Nullable */ Color color, Actor actor) {
+		drawRectangle(batch, texture, color, actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
+	}
+
+	/**
 	 * Draw {@code texture} within the rectangle at (x,y) with the given width and
 	 * height.
 	 * 
@@ -103,4 +140,14 @@ public class GDXUtils {
 		drawRectangle(batch, texture, color, x + width, y, 1, height);
 	}
 
+	/**
+	 * @param actor
+	 * @param position
+	 */
+	public static void setPosition(Actor actor, Coord position) {
+		if (actor != null && position != null) {
+			actor.setX(position.x);
+			actor.setY(position.y);
+		}
+	}
 }
