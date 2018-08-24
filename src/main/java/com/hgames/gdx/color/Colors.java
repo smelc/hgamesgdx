@@ -1,8 +1,10 @@
 package com.hgames.gdx.color;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.Color;
 
-import squidpony.ColoredStringList;
 import squidpony.panel.IColoredString;
 
 /**
@@ -44,17 +46,17 @@ public class Colors {
 	/**
 	 * @param input
 	 * @param nullReplacer
-	 *            The color by which to replace {@code null} in {@code input}.
-	 *            You should likely give something, because null is usually
-	 *            interpreted as white.
+	 *            The color by which to replace {@code null} in {@code input}. You
+	 *            should likely give something, because null is usually interpreted
+	 *            as white.
 	 * @param affectAlpha
 	 *            Whether alpha should be changed.
-	 * @return A monochromatic grey version of {@code input}.
+	 * @return A grey version of {@code input}.
 	 */
-	public static ColoredStringList<Color> greify(ColoredStringList<Color> input,
+	public static List<IColoredString<Color>> greify(List<IColoredString<Color>> input,
 			/* @Nullable */ Color nullReplacer, boolean affectAlpha) {
 		final int sz = input.size();
-		final ColoredStringList<Color> result = ColoredStringList.create(sz);
+		final List<IColoredString<Color>> result = new ArrayList<IColoredString<Color>>(sz);
 		for (int i = 0; i < sz; i++)
 			result.add(greify(input.get(i), nullReplacer, affectAlpha));
 		return result;
