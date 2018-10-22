@@ -63,7 +63,10 @@ public class GDXUtils {
 	 *            The color to use, or null for white.
 	 * @return A 1x1 white texture, ready to be stretched and colored for being
 	 *         drawn. Don't forget to {@link Texture#dispose()} it.
+	 * @deprecated It is bad for performances to call this method, because generated
+	 *             textures cause textures swap and cannot be packed.
 	 */
+	@Deprecated
 	public static Texture createTexture(/* @Nullable */ Color color) {
 		final Pixmap tmp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 		tmp.setColor(color == null ? Color.WHITE : color);
@@ -112,11 +115,16 @@ public class GDXUtils {
 	 */
 	public static void drawRectangle(Batch batch, Texture texture, /* @Nullable */ Color color, float x, float y,
 			float width, float height) {
-		final Color save = batch.getColor();
-		if (color != null)
+		final Color save;
+		if (color == null)
+			save = null;
+		else {
+			save = batch.getColor();
 			batch.setColor(color);
+		}
 		batch.draw(texture, x, y, width, height);
-		batch.setColor(save);
+		if (save != null)
+			batch.setColor(save);
 	}
 
 	/**
@@ -130,14 +138,23 @@ public class GDXUtils {
 	 */
 	public static void drawRectangleFrame(Batch batch, Texture texture, /* @Nullable */ Color color, float x, float y,
 			float width, float height) {
+		final Color save;
+		if (color == null)
+			save = null;
+		else {
+			save = batch.getColor();
+			batch.setColor(color);
+		}
 		/* Bottom line */
-		drawRectangle(batch, texture, color, x, y, width, 1f);
+		drawRectangle(batch, texture, null, x, y, width, 1f);
 		/* Top line */
-		drawRectangle(batch, texture, color, x, y + height, width, 1);
+		drawRectangle(batch, texture, null, x, y + height, width, 1);
 		/* Left line */
-		drawRectangle(batch, texture, color, x, y, 1, height);
+		drawRectangle(batch, texture, null, x, y, 1, height);
 		/* Right line */
-		drawRectangle(batch, texture, color, x + width, y, 1, height);
+		drawRectangle(batch, texture, null, x + width, y, 1, height);
+		if (save != null)
+			batch.setColor(save);
 	}
 
 	/**
