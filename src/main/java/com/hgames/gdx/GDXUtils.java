@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
@@ -102,6 +103,18 @@ public class GDXUtils {
 	}
 
 	/**
+	 * Draw a rectangle on {@code actor}
+	 * 
+	 * @param batch
+	 * @param region
+	 * @param color
+	 * @param actor
+	 */
+	public static void drawActorRectangle(Batch batch, TextureRegion region, /* @Nullable */ Color color, Actor actor) {
+		drawRectangle(batch, region, color, actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
+	}
+
+	/**
 	 * Draw {@code texture} within the rectangle at (x,y) with the given width and
 	 * height.
 	 * 
@@ -123,6 +136,32 @@ public class GDXUtils {
 			batch.setColor(color);
 		}
 		batch.draw(texture, x, y, width, height);
+		if (save != null)
+			batch.setColor(save);
+	}
+
+	/**
+	 * Draw {@code region} within the rectangle at (x,y) with the given width and
+	 * height.
+	 * 
+	 * @param batch
+	 * @param region
+	 * @param color
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
+	public static void drawRectangle(Batch batch, TextureRegion region, /* @Nullable */ Color color, float x, float y,
+			float width, float height) {
+		final Color save;
+		if (color == null)
+			save = null;
+		else {
+			save = batch.getColor();
+			batch.setColor(color);
+		}
+		batch.draw(region, x, y, width, height);
 		if (save != null)
 			batch.setColor(save);
 	}
@@ -158,13 +197,41 @@ public class GDXUtils {
 	}
 
 	/**
+	 * @param batch
+	 * @param region
+	 * @param color
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
+	public static void drawRectangleFrame(Batch batch, TextureRegion region, /* @Nullable */ Color color, float x, float y,
+			float width, float height) {
+		final Color save;
+		if (color == null)
+			save = null;
+		else {
+			save = batch.getColor();
+			batch.setColor(color);
+		}
+		/* Bottom line */
+		drawRectangle(batch, region, null, x, y, width, 1f);
+		/* Top line */
+		drawRectangle(batch, region, null, x, y + height, width, 1);
+		/* Left line */
+		drawRectangle(batch, region, null, x, y, 1, height);
+		/* Right line */
+		drawRectangle(batch, region, null, x + width, y, 1, height);
+		if (save != null)
+			batch.setColor(save);
+	}
+
+	/**
 	 * @param actor
 	 * @param position
 	 */
 	public static void setPosition(Actor actor, Coord position) {
-		if (actor != null && position != null) {
-			actor.setX(position.x);
-			actor.setY(position.y);
-		}
+		if (actor != null && position != null)
+			actor.setPosition(position.x, position.y);
 	}
 }
