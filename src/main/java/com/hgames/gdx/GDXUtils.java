@@ -128,16 +128,16 @@ public class GDXUtils {
 	 */
 	public static void drawRectangle(Batch batch, Texture texture, /* @Nullable */ Color color, float x, float y,
 			float width, float height) {
-		final Color save;
+		final float save;
 		if (color == null)
-			save = null;
+			save = -1;
 		else {
-			save = batch.getColor();
+			save = batch.getPackedColor();
 			batch.setColor(color);
 		}
 		batch.draw(texture, x, y, width, height);
-		if (save != null)
-			batch.setColor(save);
+		if (0 <= save)
+			batch.setPackedColor(save);
 	}
 
 	/**
@@ -154,16 +154,16 @@ public class GDXUtils {
 	 */
 	public static void drawRectangle(Batch batch, TextureRegion region, /* @Nullable */ Color color, float x, float y,
 			float width, float height) {
-		final Color save;
+		final float save;
 		if (color == null)
-			save = null;
+			save = -1;
 		else {
-			save = batch.getColor();
+			save = batch.getPackedColor();
 			batch.setColor(color);
 		}
 		batch.draw(region, x, y, width, height);
-		if (save != null)
-			batch.setColor(save);
+		if (0 <= save)
+			batch.setPackedColor(save);
 	}
 
 	/**
@@ -177,11 +177,11 @@ public class GDXUtils {
 	 */
 	public static void drawRectangleFrame(Batch batch, Texture texture, /* @Nullable */ Color color, float x, float y,
 			float width, float height) {
-		final Color save;
+		final float save;
 		if (color == null)
-			save = null;
+			save = -1;
 		else {
-			save = batch.getColor();
+			save = batch.getPackedColor();
 			batch.setColor(color);
 		}
 		/* Bottom line */
@@ -192,8 +192,8 @@ public class GDXUtils {
 		drawRectangle(batch, texture, null, x, y, 1, height);
 		/* Right line */
 		drawRectangle(batch, texture, null, x + width, y, 1, height);
-		if (save != null)
-			batch.setColor(save);
+		if (0 <= save)
+			batch.setPackedColor(save);
 	}
 
 	/**
@@ -207,11 +207,11 @@ public class GDXUtils {
 	 */
 	public static void drawRectangleFrame(Batch batch, TextureRegion region, /* @Nullable */ Color color, float x, float y,
 			float width, float height) {
-		final Color save;
+		final float save;
 		if (color == null)
-			save = null;
+			save = -1;
 		else {
-			save = batch.getColor();
+			save = batch.getPackedColor();
 			batch.setColor(color);
 		}
 		/* Bottom line */
@@ -222,8 +222,8 @@ public class GDXUtils {
 		drawRectangle(batch, region, null, x, y, 1, height);
 		/* Right line */
 		drawRectangle(batch, region, null, x + width, y, 1, height);
-		if (save != null)
-			batch.setColor(save);
+		if (0 <= save)
+			batch.setPackedColor(save);
 	}
 
 	/**

@@ -10,7 +10,7 @@ buildscript {
 // define 'gdxVersion' if not defined yet. This allows
 // a project depending on this library to define 'gdxVersion' itself,
 // and yet be able to build this library standalone too.
-def gdxVersion = System.getenv("gdxVersion") ?: "1.9.6"
+def gdxVersion = System.getenv("gdxVersion") ?: "1.9.9"
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
