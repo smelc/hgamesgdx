@@ -1,4 +1,4 @@
-#hgamesgdx
+# hgamesgdx
 
 A library that I use in my roguelike [Dungeon Mercenary](http://www.schplaf.org/hgames). It depends on the Java library, [libgdx](https://libgdx.badlogicgames.com/), [hgamesrhogue](https://github.com/smelc/hgamesrhogue), and [SquidLib](https://github.com/SquidPony/SquidLib).
 
